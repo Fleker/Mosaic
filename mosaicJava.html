@@ -1,0 +1,120 @@
+<!--Mosaic machine-->
+
+<head>
+	<title>Mosaic machine</title>
+	<script src="http://code.jquery.com/jquery-1.9.0.min.js"></script>
+	<link href='http://fonts.googleapis.com/css?family=Ubuntu+Mono' rel='stylesheet' type='text/css'>
+<body style="font-family: 'Ubuntu Mono', sans-serif;">
+<div id="mos">
+</div>
+
+<div id="guess">
+<form onsubmit="Interact();return false;">
+Enter 21 binary digits:
+<input type="text" id="binaryNums" autofocus="true">
+<button onclick="random();return false;">Random</button>
+<button type="submit" onclick="Interact();return false;">Send</button>
+<button onclick="slideshow(10, 1000);return false;" id="slide">Slideshow</button>
+</form>
+
+</div>
+
+<script>
+function slideshow(index, speed) {
+	$("#slide").html('Sliding');
+	for(i=0;i<index;i++) {
+		setTimeout('random()', 500 + i * speed);
+		
+	} 
+	setTimeout('$("#slide").html("Slideshow");', 500 + i * speed);
+}
+
+function random() {
+	var y = '';
+	for(i=0;i<21;i++) {
+	 	if(Math.random() > .5) {
+	 	 	y = y + '1';
+	 	}
+	 	else 
+	 		y = y + '0';
+	}
+	$('#binaryNums').val(y);
+	Interact();
+}
+
+function translate(Row, Trow) {
+ 	i = 0;
+ 	while(i < Row.length) {
+ 		if(Row.charAt(i) == '0') {
+        	Trow += 'Q';
+    	} else if(Row.charAt(i) == '1') {
+    		Trow += 'X';
+		} else {
+			Trow = "Bad input.";
+		}
+		i++;
+ 	}
+ 	return Trow;
+}
+
+function reverse(Word, Bword) {
+ 	i = Word.length - 1;
+ 	while(i >= 0) {
+		Bword += Word.charAt(i);
+		i--;
+	}
+	return Bword;
+}
+
+function Interact() {
+	var bi = $('#binaryNums').val().toString();
+	Row1 = bi.substring(0,6);
+	Row2 = bi.substring(6,11);
+	Row3 = bi.substring(11,15);
+	Row4 = bi.substring(15,18);
+	Row5 = bi.substring(18,20);
+	Row6 = bi.charAt(20);
+	
+	TR1 = translate(Row1,"");
+	TR2 = translate(Row2,"");
+	TR3 = translate(Row3,"");
+	TR4 = translate(Row4,"");
+	TR5 = translate(Row5,"");
+	TR6 = translate(Row6,"");
+
+	Graphics();
+}
+
+//Graphics
+
+function print(input) {
+	string = string + input + '<br>';
+ 	//$('#mos').append(input + '<br>');
+}
+
+
+function Graphics() {
+	string = '';
+	$('#mos').html('');
+	print(TR1+reverse(TR1,''))
+	print(TR1[1]+TR2+reverse(TR2,'')+TR1[1])
+	print(TR1[2]+TR2[1]+TR3+reverse(TR3,'')+TR2[1]+TR1[2])
+	print(TR1[3]+TR2[2]+TR3[1]+TR4+reverse(TR4,'')+TR3[1]+TR2[2]+TR1[3])
+	print(TR1[4]+TR2[3]+TR3[2]+TR4[1]+TR5+reverse(TR5,'')+TR4[1]+TR3[2]+TR2[3]+TR1[4])
+	print(TR1[5]+TR2[4]+TR3[3]+TR4[2]+TR5[1]+TR6+reverse(TR6,'')+TR5[1]+TR4[2]+TR3[3]+
+	TR2[4]+TR1[5])
+	print(TR1[5]+TR2[4]+TR3[3]+TR4[2]+TR5[1]+TR6+reverse(TR6,'')+TR5[1]+TR4[2]+TR3[3]+
+	TR2[4]+TR1[5])
+	print(TR1[4]+TR2[3]+TR3[2]+TR4[1]+TR5+reverse(TR5,'')+TR4[1]+TR3[2]+TR2[3]+TR1[4])
+	print(TR1[3]+TR2[2]+TR3[1]+TR4+reverse(TR4,'')+TR3[1]+TR2[2]+TR1[3])
+	print(TR1[2]+TR2[1]+TR3+reverse(TR3,'')+TR2[1]+TR1[2])
+	print(TR1[1]+TR2+reverse(TR2,'')+TR1[1])
+	print(TR1+reverse(TR1,''))    
+	
+	string = string.replace(/Q/g, "&nbsp;");
+	$('#mos').html(string);
+	//$('#mos').html($('#mos').text().replace(/Q/g," "));
+}
+
+</script>
+</body>
